@@ -1,0 +1,451 @@
+<script setup>
+import { ref, onMounted, computed, watch, nextTick } from 'vue';
+import { useDataStudioStore } from '../../stores/dataStore.js';
+import { 
+    parseDataset, 
+    analyzeDataset, 
+    createTableDOM, 
+    sortData 
+} from '../../dataHelpers.js';
+
+// --- Global State and Refs ---
+const store = useDataStudioStore();
+const rawInputText = ref('');
+const fileInputRef = ref(null);
+const dropZoneActive = ref(false);
+const tableContainerRef = ref(null); // Ref for the div receiving the innerHTML table
+
+// State for the processed data and sorting
+const rawDataset = ref([]);
+const processedHeaders = ref([]);
+// This is the line the error pointed to, making it a reactive object for robustness.
+// Note: It's still fine to use ref({ ... }), but I'm making it a reactive object to see if it resolves the compiler error.
+const sortState = ref({ key: null, direction: 'asc' });
+
+// --- Computed Properties ---
+
+// The final data array after sorting (uses pure JS sort function)
+const sortedData = computed(() => {
+    // Pass the current sort state to the data rendering function
+    return sortData(rawDataset.value, sortState.value.key, sortState.value.direction);
+});
+
+// --- Data Processing and Rendering ---
+
+/**
+ * Main function to process the input text and update global state.
+ */
+const processInput = () => {
+    store.setDatasetFeedback({ success: false, message: 'Processing dataset...', rows: 0, columns: 0, headers: [] });
+    
+    const parseResult = parseDataset(rawInputText.value);
+
+    if (parseResult.error || !parseResult.data || parseResult.data.length === 0) {
+        store.setDatasetFeedback({
+            success: false,
+            message: `Parsing failed (Type: ${parseResult.type}). Error: ${parseResult.error || 'No data found.'}`,
+            rows: 0,
+            columns: 0,
+            headers: []
+        });
+        rawDataset.value = [];
+        processedHeaders.value = [];
+        // Clear old table content
+        if (tableContainerRef.value) {
+            tableContainerRef.value.innerHTML = '';
+        }
+        return;
+    }
+
+    rawDataset.value = parseResult.data;
+    const analysis = analyzeDataset(parseResult.data);
+    console.log('|');
+    console.log('| DatasetExplorer analysis ', analysis);
+    console.log('|');
+    processedHeaders.value = analysis.allKeys;
+
+    // Update global state with feedback
+    store.setDatasetFeedback({
+        success: true,
+        message: `Successfully loaded ${parseResult.type} data.`,
+        rows: analysis.rows,
+        columns: analysis.columns,
+        headers: analysis.headers
+    });
+    
+    // Reset sort state when new data is loaded
+    sortState.value = { key: null, direction: 'asc' };
+    
+    // Initial render of the table
+    renderTable(rawDataset.value);
+};
+
+/**
+ * Renders the data table DOM into the container.
+ * @param {Array<Object>} data - The data to render.
+ */
+const renderTable = (data) => {
+    if (!tableContainerRef.value) return;
+
+    // Use the current sort state when creating the DOM (for indicators)
+    const tableHtml = createTableDOM(data, processedHeaders.value, sortState.value);
+    
+    // Note: createTableDOM relies on 'window.vueAppInstance.handleSortClick' 
+    // being available when the button is clicked.
+    tableContainerRef.value.innerHTML = tableHtml;
+};
+
+// Watch for changes in sortedData and re-render the table
+watch(sortedData, (newData) => {
+    renderTable(newData);
+});
+
+
+// --- Drag and Drop Handlers ---
+
+const handleDragEnter = (e) => {
+    e.preventDefault();
+    dropZoneActive.value = true;
+};
+
+const handleDragLeave = (e) => {
+    e.preventDefault();
+    dropZoneActive.value = false;
+};
+
+const handleDrop = (e) => {
+    e.preventDefault();
+    dropZoneActive.value = false;
+    const file = e.dataTransfer.files[0];
+    if (file) {
+        readFile(file);
+    }
+};
+
+const handleFileInput = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        readFile(file);
+    }
+};
+
+const readFile = (file) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        rawInputText.value = e.target.result;
+        processInput();
+    };
+    reader.readAsText(file);
+};
+
+
+// --- Sorting Logic (Exposed Globally) ---
+
+/**
+ * Handles the click event from the dynamic innerHTML table header button.
+ * This function MUST be exposed globally for the DOM to call it.
+ * @param {Event} event - The DOM click event.
+ * @param {string} headerKey - The column key (header name) to sort by.
+ */
+const handleSortClick = (event, headerKey) => {
+    event.stopPropagation();
+    
+    const currentKey = sortState.value.key;
+    const currentDirection = sortState.value.direction;
+
+    if (currentKey === headerKey) {
+        // Toggle direction
+        sortState.value = { 
+            key: headerKey, 
+            direction: currentDirection === 'asc' ? 'desc' : 'asc' 
+        };
+    } else {
+        // New key, reset to ascending
+        sortState.value = { 
+            key: headerKey, 
+            direction: 'asc' 
+        };
+    }
+    // Re-rendering is handled by the `watch(sortedData, ...)` effect.
+};
+
+// --- Lifecycle Hook ---
+
+onMounted(() => {
+    // Expose the necessary function to the window object so the dynamically 
+    // created innerHTML buttons can call it.
+    window.vueAppInstance = window.vueAppInstance || {};
+    window.vueAppInstance.handleSortClick = handleSortClick;
+});
+
+
+// --- Template ---
+</script>
+
+<template>
+    <div class="dataset-explorer-container">
+        <!-- Input Section -->
+        <div 
+            class="input-section"
+            :class="{ 'drop-zone-active': dropZoneActive }"
+            @dragenter.prevent="handleDragEnter"
+            @dragleave.prevent="handleDragLeave"
+            @dragover.prevent
+            @drop.prevent="handleDrop"
+        >
+            <textarea 
+                v-model="rawInputText"
+                placeholder="Paste your CSV, JSON, or TSV data here..."
+                @input="processInput"
+                class="data-input-textarea"
+            ></textarea>
+            
+            <div class="file-upload-overlay">
+                <p>or drag and drop a file, or click to upload</p>
+                <input 
+                    type="file" 
+                    ref="fileInputRef" 
+                    @change="handleFileInput" 
+                    class="file-input"
+                    accept=".csv,.json,.tsv,.txt"
+                />
+            </div>
+            
+            <button @click="fileInputRef.click()" class="upload-button">
+                Upload Data File
+            </button>
+        </div>
+
+        <!-- Feedback and Analysis Section -->
+        <div class="analysis-feedback-section">
+            <span 
+                class="feedback-chip" 
+                :class="{ 'success': store.datasetFeedback.success, 'error': !store.datasetFeedback.success }"
+            >
+                {{ store.datasetFeedback.message }}
+            </span>
+            <span v-if="store.datasetFeedback.success" class="analysis-chip">
+                Rows: {{ store.datasetFeedback.rows }} | Columns: {{ store.datasetFeedback.columns }}
+            </span>
+            <div class="header-chips">
+                <span v-for="header in store.datasetFeedback.headers" :key="header" class="header-chip">
+                    {{ header }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Data Table Section (Preview) -->
+        <div class="data-table-section">
+            <h2 class="section-title">Data Preview ({{ sortedData.length }} rows)</h2>
+            <div class="table-container" ref="tableContainerRef">
+                <!-- Data table will be rendered here by JavaScript using innerHTML -->
+            </div>
+        </div>
+    </div>
+</template>
+
+<style scoped>
+/* GENERAL STYLING */
+.dataset-explorer-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+}
+
+.section-title {
+    font-size: 1.5em;
+    font-weight: 600;
+    color: var(--color-dark, #2c3e50);
+    margin-bottom: 15px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+}
+
+/* INPUT SECTION */
+.input-section {
+    position: relative;
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+.drop-zone-active {
+    border-color: #3498db; /* Blue for active drop zone */
+    background-color: #eaf6ff;
+}
+
+.data-input-textarea {
+    width: 100%;
+    height: 150px;
+    min-height: 100px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 0.9em;
+    resize: vertical;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.file-upload-overlay {
+    text-align: center;
+    color: #888;
+    margin-top: 10px;
+}
+
+.file-upload-overlay p {
+    margin: 5px 0;
+}
+
+.file-input {
+    display: none; /* Hide the default file input */
+}
+
+.upload-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #3498db; /* Blue */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.upload-button:hover {
+    background-color: #2980b9;
+}
+
+.upload-button:active {
+    transform: translateY(1px);
+}
+
+/* FEEDBACK SECTION */
+.analysis-feedback-section {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.feedback-chip, .analysis-chip, .header-chip {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.feedback-chip.success {
+    background-color: #e6ffe6; /* Light green */
+    color: #27ae60; /* Dark green */
+    border: 1px solid #27ae60;
+}
+
+.feedback-chip.error {
+    background-color: #ffe6e6; /* Light red */
+    color: #e74c3c; /* Dark red */
+    border: 1px solid #e74c3c;
+}
+
+.analysis-chip {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+}
+
+.header-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.header-chip {
+    background-color: #f0f4f7;
+    color: #34495e;
+    padding: 4px 8px;
+    border: 1px solid #dcdfe4;
+    margin-right: 5px;
+    margin-top: 5px;
+    font-size: 0.8em;
+}
+
+/* DATA TABLE STYLING */
+.data-table-section {
+    padding-top: 20px;
+}
+
+.table-container {
+    overflow-x: auto;
+    max-height: 60vh; /* Limit height for scrollability */
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px; /* Ensure wide content is scrollable */
+}
+
+.data-table th, .data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #f2f2f2;
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+
+.data-table th {
+    background-color: var(--color-dark, #34495e); /* Dark Blue/Gray */
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.data-table tr:nth-child(even) {
+    background-color: #f8f8f8;
+}
+
+.data-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.header-button {
+    background: none;
+    border: none;
+    color: inherit;
+    font-weight: inherit;
+    font-size: 1em;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.header-button:hover {
+    text-decoration: underline;
+}
+
+.sort-indicator {
+    display: inline-block;
+    width: 10px;
+}
+
+.null-cell {
+    color: #95a5a6; /* Gray color for NULL */
+    font-style: italic;
+}
+</style>

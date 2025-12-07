@@ -1,11 +1,19 @@
-<script setup></script>
+<script setup>
+import ObjectEditor from './components/ObjectEditor/ObjectEditor.vue';
+import DataStudioMain from './DataStudioMain.vue';
+
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <DataStudioMain />
+  <ObjectEditor />
 </template>
 
-<style scoped></style>
+<style>
+html * {
+  font-size: 16px;
+  line-height: 1.625;
+  color: #202012;
+  font-family: Nunito, sans-serif;
+}
+</style>
