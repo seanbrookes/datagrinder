@@ -203,12 +203,14 @@ const outputD3Hierarchy = computed(() => {
       </div>
     </div>
     <div>
+      <!-- comment out for now as performance suffers with large trees 
       Tree goes here
       <D3TreeVisualizer :data="JSON.parse(outputD3Hierarchy)" />
       force
       <D3ForceVisualizer :data="JSON.parse(outputD3Hierarchy)" />
       Three Force
       <ThreeForceVisualizer :data="JSON.parse(outputD3Hierarchy)" />
+      -->
     </div>
   </div>
 </template>
