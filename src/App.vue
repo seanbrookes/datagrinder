@@ -6,7 +6,9 @@ import DataStudioMain from './DataStudioMain.vue';
 
 <template>
   <DataStudioMain />
+  <!--
   <ObjectEditor />
+  -->
 </template>
 
 <style>
