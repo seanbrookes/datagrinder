@@ -1,0 +1,522 @@
+[
+  {
+    "id": 1,
+    "year": 1,
+    "flow": "outflow",
+    "category": "tuition",
+    "amount": 11000,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 2,
+    "year": 1,
+    "flow": "outflow",
+    "category": "fees",
+    "amount": 1800,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 3,
+    "year": 1,
+    "flow": "outflow",
+    "category": "housing",
+    "amount": 8500,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 4,
+    "year": 1,
+    "flow": "outflow",
+    "category": "meal_plan",
+    "amount": 4800,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 5,
+    "year": 1,
+    "flow": "outflow",
+    "category": "books",
+    "amount": 1200,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 6,
+    "year": 1,
+    "flow": "outflow",
+    "category": "transportation",
+    "amount": 1000,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 7,
+    "year": 1,
+    "flow": "outflow",
+    "category": "personal",
+    "amount": 2000,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 8,
+    "year": 1,
+    "flow": "outflow",
+    "category": "health_insurance",
+    "amount": 2400,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 9,
+    "year": 2,
+    "flow": "outflow",
+    "category": "tuition",
+    "amount": 11450,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 10,
+    "year": 2,
+    "flow": "outflow",
+    "category": "fees",
+    "amount": 1870,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 11,
+    "year": 2,
+    "flow": "outflow",
+    "category": "housing",
+    "amount": 8850,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 12,
+    "year": 2,
+    "flow": "outflow",
+    "category": "meal_plan",
+    "amount": 4990,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 13,
+    "year": 2,
+    "flow": "outflow",
+    "category": "books",
+    "amount": 1250,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 14,
+    "year": 2,
+    "flow": "outflow",
+    "category": "transportation",
+    "amount": 1050,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 15,
+    "year": 2,
+    "flow": "outflow",
+    "category": "personal",
+    "amount": 2100,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 16,
+    "year": 2,
+    "flow": "outflow",
+    "category": "health_insurance",
+    "amount": 2500,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 17,
+    "year": 3,
+    "flow": "outflow",
+    "category": "tuition",
+    "amount": 11900,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 18,
+    "year": 3,
+    "flow": "outflow",
+    "category": "fees",
+    "amount": 1950,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 19,
+    "year": 3,
+    "flow": "outflow",
+    "category": "housing",
+    "amount": 9200,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 20,
+    "year": 3,
+    "flow": "outflow",
+    "category": "meal_plan",
+    "amount": 5190,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 21,
+    "year": 3,
+    "flow": "outflow",
+    "category": "books",
+    "amount": 1300,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 22,
+    "year": 3,
+    "flow": "outflow",
+    "category": "transportation",
+    "amount": 1100,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 23,
+    "year": 3,
+    "flow": "outflow",
+    "category": "personal",
+    "amount": 2200,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 24,
+    "year": 3,
+    "flow": "outflow",
+    "category": "health_insurance",
+    "amount": 2600,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 25,
+    "year": 4,
+    "flow": "outflow",
+    "category": "tuition",
+    "amount": 12380,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 26,
+    "year": 4,
+    "flow": "outflow",
+    "category": "fees",
+    "amount": 2030,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 27,
+    "year": 4,
+    "flow": "outflow",
+    "category": "housing",
+    "amount": 9570,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 28,
+    "year": 4,
+    "flow": "outflow",
+    "category": "meal_plan",
+    "amount": 5400,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 29,
+    "year": 4,
+    "flow": "outflow",
+    "category": "books",
+    "amount": 1350,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 30,
+    "year": 4,
+    "flow": "outflow",
+    "category": "transportation",
+    "amount": 1150,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 31,
+    "year": 4,
+    "flow": "outflow",
+    "category": "personal",
+    "amount": 2300,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 32,
+    "year": 4,
+    "flow": "outflow",
+    "category": "health_insurance",
+    "amount": 2700,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 33,
+    "year": 1,
+    "flow": "inflow",
+    "category": "savings_529",
+    "amount": 8000,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 34,
+    "year": 1,
+    "flow": "inflow",
+    "category": "family_contribution",
+    "amount": 8000,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 35,
+    "year": 1,
+    "flow": "inflow",
+    "category": "merit_scholarship",
+    "amount": 6000,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 36,
+    "year": 1,
+    "flow": "inflow",
+    "category": "need_grant",
+    "amount": 5000,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 37,
+    "year": 1,
+    "flow": "inflow",
+    "category": "work_study",
+    "amount": 2500,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 38,
+    "year": 1,
+    "flow": "inflow",
+    "category": "summer_earnings",
+    "amount": 3000,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 39,
+    "year": 1,
+    "flow": "inflow",
+    "category": "federal_loan",
+    "amount": 2000,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 40,
+    "year": 2,
+    "flow": "inflow",
+    "category": "savings_529",
+    "amount": 8000,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 41,
+    "year": 2,
+    "flow": "inflow",
+    "category": "family_contribution",
+    "amount": 8000,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 42,
+    "year": 2,
+    "flow": "inflow",
+    "category": "merit_scholarship",
+    "amount": 6000,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 43,
+    "year": 2,
+    "flow": "inflow",
+    "category": "need_grant",
+    "amount": 5000,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 44,
+    "year": 2,
+    "flow": "inflow",
+    "category": "work_study",
+    "amount": 2500,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 45,
+    "year": 2,
+    "flow": "inflow",
+    "category": "summer_earnings",
+    "amount": 3500,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 46,
+    "year": 2,
+    "flow": "inflow",
+    "category": "part_time_job",
+    "amount": 2000,
+    "certainty": "hopeful"
+  },
+  {
+    "id": 47,
+    "year": 2,
+    "flow": "inflow",
+    "category": "federal_loan",
+    "amount": 2000,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 48,
+    "year": 3,
+    "flow": "inflow",
+    "category": "savings_529",
+    "amount": 6000,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 49,
+    "year": 3,
+    "flow": "inflow",
+    "category": "family_contribution",
+    "amount": 8000,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 50,
+    "year": 3,
+    "flow": "inflow",
+    "category": "merit_scholarship",
+    "amount": 6000,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 51,
+    "year": 3,
+    "flow": "inflow",
+    "category": "need_grant",
+    "amount": 5000,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 52,
+    "year": 3,
+    "flow": "inflow",
+    "category": "work_study",
+    "amount": 3000,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 53,
+    "year": 3,
+    "flow": "inflow",
+    "category": "summer_earnings",
+    "amount": 4500,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 54,
+    "year": 3,
+    "flow": "inflow",
+    "category": "part_time_job",
+    "amount": 2500,
+    "certainty": "hopeful"
+  },
+  {
+    "id": 55,
+    "year": 3,
+    "flow": "inflow",
+    "category": "departmental_scholarship",
+    "amount": 2000,
+    "certainty": "hopeful"
+  },
+  {
+    "id": 56,
+    "year": 3,
+    "flow": "inflow",
+    "category": "federal_loan",
+    "amount": 2500,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 57,
+    "year": 4,
+    "flow": "inflow",
+    "category": "savings_529",
+    "amount": 4000,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 58,
+    "year": 4,
+    "flow": "inflow",
+    "category": "family_contribution",
+    "amount": 8000,
+    "certainty": "confirmed"
+  },
+  {
+    "id": 59,
+    "year": 4,
+    "flow": "inflow",
+    "category": "merit_scholarship",
+    "amount": 6000,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 60,
+    "year": 4,
+    "flow": "inflow",
+    "category": "need_grant",
+    "amount": 5000,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 61,
+    "year": 4,
+    "flow": "inflow",
+    "category": "work_study",
+    "amount": 3000,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 62,
+    "year": 4,
+    "flow": "inflow",
+    "category": "summer_earnings",
+    "amount": 5000,
+    "certainty": "anticipated"
+  },
+  {
+    "id": 63,
+    "year": 4,
+    "flow": "inflow",
+    "category": "part_time_job",
+    "amount": 2500,
+    "certainty": "hopeful"
+  },
+  {
+    "id": 64,
+    "year": 4,
+    "flow": "inflow",
+    "category": "departmental_scholarship",
+    "amount": 3000,
+    "certainty": "hopeful"
+  },
+  {
+    "id": 65,
+    "year": 4,
+    "flow": "inflow",
+    "category": "federal_loan",
+    "amount": 3000,
+    "certainty": "confirmed"
+  }
+]

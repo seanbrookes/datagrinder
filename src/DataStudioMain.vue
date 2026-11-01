@@ -5,6 +5,7 @@ import { useDataStudioStore } from './stores/dataStore.js';
 import ObjectEditor from './components/ObjectEditor/ObjectEditor.vue';
 import DatasetExplorer from './components/DatasetExplorer/DatasetExplorer.vue';
 import StorageManager from './components/StorageManager/StorageManager.vue';
+import PopulationGenerator from './components/PopulationGenerator/PopulationGenerator.vue';
 
 // Initialize Pinia store
 const store = useDataStudioStore();
@@ -14,6 +15,7 @@ const viewComponents = {
   ObjectEditor,
   DatasetExplorer,
   StorageManager,
+  PopulationGenerator,
 };
 
 // Computed property to determine which component to render

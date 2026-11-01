@@ -9,7 +9,8 @@ export const useDataStudioStore = defineStore('dataStudio', () => {
   const views = ref([
     { name: 'DatasetExplorer', label: 'Dataset Explorer' },
     { name: 'ObjectEditor', label: 'Object Editor' },
-    { name: 'StorageManager', label: 'Data Storage' }
+    { name: 'StorageManager', label: 'Data Storage' },
+    { name: 'PopulationGenerator', label: 'Population Generator' },
   ]);
 
   // --- State for Dataset Analysis Feedback (Used by DatasetExplorer) ---
@@ -32,6 +33,9 @@ export const useDataStudioStore = defineStore('dataStudio', () => {
   const dataToLoad = ref(null);
   const loadedDatasets = ref({});
   const activeDataset = ref(null);
+
+  // --- Population Schema State ---
+  const savedSchemas = ref([]);
 
 
   // --- Computed Properties ---
@@ -80,7 +84,9 @@ export const useDataStudioStore = defineStore('dataStudio', () => {
         };
       });
 
-      savedDatasetsMetadata.value = await Promise.all(metadataPromises);
+      const all = await Promise.all(metadataPromises);
+      savedDatasetsMetadata.value = all.filter(item => item._type !== 'population-schema');
+      savedSchemas.value = all.filter(item => item._type === 'population-schema');
 
       // Get storage estimate (optional, may not be supported by all browsers)
       if (navigator.storage && navigator.storage.estimate) {
@@ -177,12 +183,48 @@ export const useDataStudioStore = defineStore('dataStudio', () => {
   }
 
 
+  // --- Population Schema Actions ---
+
+  async function saveSchema(schemaObject) {
+    try {
+      const now = Date.now();
+      const key = schemaObject.name || `pop-schema-${now}`;
+      const existing = await storage.getItem(key);
+      // Deep-clone via JSON to strip Vue reactive proxies before IDB storage
+      const plain = JSON.parse(JSON.stringify(schemaObject));
+      await storage.setItem(key, {
+        ...plain,
+        name: key,
+        _type: 'population-schema',
+        created: existing?.created ?? now,
+        updated: now,
+      });
+      await refreshStorageData();
+      return key;
+    } catch (e) {
+      console.error('Failed to save schema:', e);
+      return null;
+    }
+  }
+
+  async function deleteSchema(name) {
+    try {
+      await storage.removeItem(name);
+      await refreshStorageData();
+      return true;
+    } catch (e) {
+      console.error(`Failed to delete schema ${name}:`, e);
+      return false;
+    }
+  }
+
   return {
     // State
     currentView,
     views,
     datasetFeedback,
     savedDatasetsMetadata,
+    savedSchemas,
     storageEstimate,
     dataToLoad,
     loadedDatasets,
@@ -199,6 +241,8 @@ export const useDataStudioStore = defineStore('dataStudio', () => {
     saveNewDataset,
     loadDataset,
     deleteDataset,
-    clearDataToLoad, // <-- EXPOSED for the consumer component (DatasetExplorer)
+    clearDataToLoad,
+    saveSchema,
+    deleteSchema,
   };
 });
